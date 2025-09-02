@@ -13,7 +13,6 @@ export default function AddSchool() {
     const [message, setMessage] = useState("");
     const [preview, setPreview] = useState(null);
 
-
     const onSubmit = async (data) => {
         const formData = new FormData();
 
@@ -35,18 +34,25 @@ export default function AddSchool() {
         if (res.ok) {
             setMessage("School added successfully!");
             reset();
+
+            setTimeout(() => {
+                setMessage("");
+                setPreview(null);
+            }, 3000);
         } else {
             setMessage("Error adding school.");
+            setTimeout(() => {
+                setMessage("");
+            }, 3000);
         }
     };
     //handle file chane
-    const handleFileChange = (e)=>{
-        const file = e.target.files[0]
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
         if (file) {
             setPreview(URL.createObjectURL(file));
-          }
-
-    }
+        }
+    };
 
     //home button logic
     const router = useRouter();
