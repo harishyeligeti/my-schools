@@ -31,21 +31,33 @@ export async function POST(req) {
             return NextResponse.json({ error: "No image uploaded" }, { status: 400 });
         }
 
-        // Convertingg File to Buffer
-        const arrayBuffer = await imageFile.arrayBuffer(); 
+        // Convert image to Base64
+        const arrayBuffer = await imageFile.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
+        const base64Image = buffer.toString("base64");
 
-        // Save file in public/schoolImages
-        const fileName = `${Date.now()}-${imageFile.name}`;
-        const filePath = path.join(process.cwd(), "public", "schoolImages", fileName);
-        await fs.writeFile(filePath, buffer);
+        // Upload to ImgBB
+        const uploadRes = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`, {
+            method: "POST",
+            body: new URLSearchParams({
+                image: base64Image,
+            }),
+        });
 
-        // Insert into database
-        await pool.execute("INSERT INTO schools (name, address, city, state, contact, email_id, image) VALUES (?, ?, ?, ?, ?, ?, ?)", [name, address, city, state, contact, email_id, fileName]);
+        const uploadData = await uploadRes.json();
+
+        if (!uploadData.success) {
+            throw new Error("Image upload failed");
+        }
+
+        const imageUrl = uploadData.data.url;
+
+        // Insert into database (store the image URL instead of file name)
+        await pool.execute("INSERT INTO schools (name, address, city, state, contact, email_id, image) VALUES (?, ?, ?, ?, ?, ?, ?)", [name, address, city, state, contact, email_id, imageUrl]);
 
         return NextResponse.json({ message: "School added successfully!" });
     } catch (error) {
         console.error("POST Error:", error);
-        return NextResponse.json({ error: "Error adding school" }, { status: 500 });
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

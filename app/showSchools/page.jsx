@@ -19,7 +19,7 @@ export default function ShowSchools() {
             {schools.length > 0 ? (
                 schools.map((school) => (
                     <div key={school.id} className="flex flex-col border border-gray-300 rounded-xl bg-white shadow-sm p-4 hover:shadow-2xl hover:scale-105 transition">
-                        <img src={`/schoolImages/${school.image || "default.png"}`} alt={school.name} className="w-full h-60 object-cover rounded-lg mb-3" />
+                        <img src={`${school.image}`} alt={school.name} className="w-full h-60 object-cover rounded-lg mb-3" />
                         <h3 className="text-lg font-semibold mb-1">{school.name}</h3>
                         <p className="text-gray-600">{school.address}</p>
                         <p className="text-gray-600">{school.city}</p>

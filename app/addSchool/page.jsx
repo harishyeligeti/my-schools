@@ -11,6 +11,8 @@ export default function AddSchool() {
         reset,
     } = useForm();
     const [message, setMessage] = useState("");
+    const [preview, setPreview] = useState(null);
+
 
     const onSubmit = async (data) => {
         const formData = new FormData();
@@ -33,11 +35,18 @@ export default function AddSchool() {
         if (res.ok) {
             setMessage("School added successfully!");
             reset();
-            setMessage("");
         } else {
             setMessage("Error adding school.");
         }
     };
+    //handle file chane
+    const handleFileChange = (e)=>{
+        const file = e.target.files[0]
+        if (file) {
+            setPreview(URL.createObjectURL(file));
+          }
+
+    }
 
     //home button logic
     const router = useRouter();
@@ -69,7 +78,12 @@ export default function AddSchool() {
                 <input placeholder="Email" type="email" {...register("email_id", { required: true, pattern: /^\S+@\S+$/i })} className="border p-2 rounded" />
                 {errors.email_id && <span className="text-red-500">Invalid Email</span>}
 
-                <input type="file" {...register("image", { required: true })} className="border p-2 rounded" />
+                {/* File Upload */}
+                <input type="file" {...register("image", { required: true })} className="border p-2 rounded" onChange={handleFileChange} />
+                {errors.image && <span className="text-red-500">Required</span>}
+
+                {/* Show Preview if Selected */}
+                {preview && <img src={preview} alt="Preview" className="w-32 h-32 object-cover rounded border" />}
 
                 <button type="submit" className="bg-blue-600 text-white font-bold py-2 rounded cursor-pointer">
                     Add School
