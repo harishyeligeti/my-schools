@@ -2,6 +2,32 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+## 1 Installation
+
+### Clone the repository:
+
+```
+git clone <repository-url>
+cd <project-folder>
+```
+
+
+## Install dependencies:
+
+```
+npm install
+# or
+yarn
+# or
+pnpm install
+```
+
+### 2️ Environment Variables
+
+Create a .env.local file in the root of the project.
+
+Add the following variables (replace with your own credentials):
+
 First, run the development server:
 
 ```bash
@@ -18,7 +44,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Schools Dashboard
 
@@ -29,6 +54,8 @@ A simple Next.js (App Router) project that displays a list of schools in a respo
  **Responsive design:** Works seamlessly across all devices.
  
  **Dynamic school listing**: Data fetched from MySQL (Aiven Cloud).
+ 
+ **cloud Image hosting :** utilised imgBB for hosting the images using api key
 
  **Database integration**: Insert & fetch data from Aiven-hosted MySQL.  
 
