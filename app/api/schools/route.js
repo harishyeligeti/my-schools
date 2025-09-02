@@ -31,8 +31,8 @@ export async function POST(req) {
             return NextResponse.json({ error: "No image uploaded" }, { status: 400 });
         }
 
-        // Convert File to Buffer
-        const arrayBuffer = await imageFile.arrayBuffer(); // this works in Node 18+
+        // Convertingg File to Buffer
+        const arrayBuffer = await imageFile.arrayBuffer(); 
         const buffer = Buffer.from(arrayBuffer);
 
         // Save file in public/schoolImages
@@ -40,7 +40,7 @@ export async function POST(req) {
         const filePath = path.join(process.cwd(), "public", "schoolImages", fileName);
         await fs.writeFile(filePath, buffer);
 
-        // Insert into DB (store filename)
+        // Insert into database
         await pool.execute("INSERT INTO schools (name, address, city, state, contact, email_id, image) VALUES (?, ?, ?, ?, ?, ?, ?)", [name, address, city, state, contact, email_id, fileName]);
 
         return NextResponse.json({ message: "School added successfully!" });
@@ -48,11 +48,4 @@ export async function POST(req) {
         console.error("POST Error:", error);
         return NextResponse.json({ error: "Error adding school" }, { status: 500 });
     }
-}
-async function streamToBuffer(readableStream) {
-    const chunks = [];
-    for await (const chunk of readableStream) {
-        chunks.push(Buffer.from(chunk));
-    }
-    return Buffer.concat(chunks);
 }
